@@ -1,0 +1,18 @@
+[
+  {
+    "_id": "250123456",
+    "nome": "Diogo Cliente",
+    "telefone": "920000001",
+    "morada": "Rua da Universidade, Braga",
+    "email": "mobifix6969@gmail.com",
+    "passwordHash": "$2a$12$KZRN.cKaQnFeSk26/iGfcOh1UgXU1AEqduANBI6LqOPTdf9TbJSuu"
+  },
+  {
+    "_id": "260987654",
+    "nome": "Ana Silva",
+    "telefone": "920000002",
+    "morada": "Avenida Central, Guimarães",
+    "email": "ana.silva@outlook.com",
+    "passwordHash": "$2a$12$KZRN.cKaQnFeSk26/iGfcOh1UgXU1AEqduANBI6LqOPTdf9TbJSuu"
+  }
+]

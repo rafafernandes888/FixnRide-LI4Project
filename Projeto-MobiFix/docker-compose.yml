@@ -1,0 +1,68 @@
+services:
+  mongodb:
+    build:
+      context: ./Database
+      dockerfile: mongo-config/Dockerfile
+    container_name: mobifix_mongodb
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=fixnride_db
+
+  data-api:
+    build:
+      context: ./Database
+      dockerfile: Dockerfile
+    container_name: mobifix_data_api
+    depends_on:
+      - mongodb
+    ports:
+      - "${DATA_API_PORT}:3001"
+    volumes:
+      - data_api_uploads:/usr/src/app/uploads
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/fixnride_db
+      - DATA_API_PORT=3001
+      - INTERNAL_API_KEY=${INTERNAL_API_KEY}
+      - JWT_SECRET=${JwtSettings__SecretKey}
+    env_file:
+      - .env
+
+  ln:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    container_name: mobifix_ln_api
+    depends_on:
+      - data-api
+    ports:
+      - "${LN_API_PORT}:5001"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - DATA_API_URL=http://data-api:3001      # Alterado para tirar a barra final
+      - DataApiSettings__BaseUrl=http://data-api:3001 # 👈 A SALVAÇÃO!
+      - INTERNAL_API_KEY=${INTERNAL_API_KEY}
+      - JwtSettings__SecretKey=${JwtSettings__SecretKey}
+      - JwtSettings__Issuer=MobiFix.API
+      - JwtSettings__Audience=MobiFix.Frontend
+    env_file:
+      - .env
+
+  frontend:
+    image: node:22-alpine
+    container_name: mobifix_frontend
+    working_dir: /app
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./Frontend:/app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    command: sh -c "npm install && npm run dev"
+    depends_on:
+      - ln
+
+volumes:
+  mongodb_data:
+  data_api_uploads:

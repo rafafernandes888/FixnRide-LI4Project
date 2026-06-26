@@ -1,0 +1,47 @@
+[
+  {
+    "_id": 2,
+    "trotineteId": "SN-XIAOMI-001",
+    "estado": "EXECUCAO",
+    "dataAgendamento": "2024-03-26T10:00",
+    "descricaoDiagnostico": "Furo no pneu traseiro e travão perro.",
+    "feedbackCliente": "Deixou de puxar, nem arranca sozinho",
+    "preco": 10.00,
+    "historicoIntervencoes": [
+      {
+        "intervencaoCatalogoId": 1,
+        "mecanicoId": "MEC001",
+        "dataInicio": "2024-03-26T10:15",
+        "pecasUtilizadas": [
+          {
+            "pecaId": "EAN001",
+            "quantidade": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "_id": 1,
+    "trotineteId": "SN-XIAOMI-002",
+    "estado": "CONCLUIDO",
+    "dataAgendamento": "2024-03-26T10:00",
+    "dataConclusao": "2024-03-26T10:30",
+    "descricaoDiagnostico": "Furo no pneu traseiro e travão perro.",
+    "feedbackCliente": "Arrebantou-lhe o paneu",
+    "preco": 40.00,
+    "historicoIntervencoes": [
+      {
+        "intervencaoCatalogoId": 1,
+        "mecanicoId": "MEC001",
+        "dataInicio": "2024-03-26T10:15",
+        "pecasUtilizadas": [
+          {
+            "pecaId": "EAN001",
+            "quantidade": 1
+          }
+        ]
+      }
+    ]
+  }
+]

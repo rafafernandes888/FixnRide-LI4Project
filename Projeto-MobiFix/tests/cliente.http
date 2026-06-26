@@ -1,0 +1,83 @@
+### ============================================================================
+### VARIÁVEIS GLOBAIS
+### ============================================================================
+@baseUrl = http://localhost:3001/api
+@apiKey = MobiFix_Super_Secret_Key_2024
+
+### ============================================================================
+### MÓDULO: CLIENTES
+### ============================================================================
+
+### 1. Criar Cliente
+### EXPECTATIVA: Status 201 Created. O corpo da resposta deve conter o NIF e os restantes dados.
+# @name criarCliente
+POST {{baseUrl}}/clientes
+Content-Type: application/json
+
+{
+    "NIF": "999456789",
+    "Nome": "Maria Cliente Teste",
+    "Telefone": "920000000",
+    "Morada": "Rua da Mobilidade, 123, Braga",
+    "Email": "maria.teste@clientes.pt",
+    "PasswordHash": "hash_secreta_cliente_xyz"
+}
+
+### ----------------------------------------------------------------------------
+### Variáveis dinâmicas: Captura o NIF e o Email do cliente recém-criado
+### (Corre o pedido acima primeiro!)
+@idCliente = {{criarCliente.response.body.$.NIF}}
+@emailCliente = {{criarCliente.response.body.$.Email}}
+### ----------------------------------------------------------------------------
+
+### 2. Listar Clientes (Sem Filtros)
+### EXPECTATIVA: Status 200 OK. A resposta deve ser um Array [ ... ] com todos os clientes.
+GET {{baseUrl}}/clientes
+
+###
+
+### 3. Listar Clientes (Com Filtros)
+### EXPECTATIVA: Status 200 OK. A resposta deve ser um Array contendo apenas a Maria.
+GET {{baseUrl}}/clientes?email={{emailCliente}}
+
+###
+
+### 4. Obter Cliente Específico (Pelo NIF)
+### EXPECTATIVA: Status 200 OK. Retorna os dados do cliente criado no passo 1.
+GET {{baseUrl}}/clientes/{{idCliente}}
+
+###
+
+### 5. SIMULAÇÃO LN - Obter Cliente para Login (SUCESSO)
+### EXPECTATIVA: Status 200 OK. 
+### A pesquisa por nif e TEM de devolver a PasswordHash.
+GET {{baseUrl}}/auth/cliente/{{idCliente}}
+x-api-key: {{apiKey}}
+
+###
+
+### 5.1 SIMULAÇÃO LN - Falha de Segurança (SEM API KEY)
+### EXPECTATIVA: Status 403 Forbidden. Mensagem "Acesso Negado."
+GET {{baseUrl}}/auth/cliente/{{idCliente}}
+x-api-key: chave_errada_aqui
+
+###
+
+### 6. Atualizar Cliente
+### EXPECTATIVA: Status 200 OK. O nome muda para "Atualizado", a morada também. 
+### (Nota: a PasswordHash não deve ser alterada por esta rota base).
+PUT {{baseUrl}}/clientes/{{idCliente}}
+Content-Type: application/json
+
+{
+    "Nome": "Maria Cliente Teste Atualizado",
+    "Telefone": "921111111",
+    "Morada": "Avenida Nova, 456, Braga",
+    "Email": "maria.atualizada@cliente.pt"
+}
+
+###
+
+### 7. Eliminar Cliente
+### EXPECTATIVA: Status 204 No Content. O painel da direita fica vazio (sucesso).
+DELETE {{baseUrl}}/clientes/{{idCliente}}

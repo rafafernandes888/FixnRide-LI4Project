@@ -1,0 +1,83 @@
+### ============================================================================
+### VARIÁVEIS GLOBAIS
+### ============================================================================
+@baseUrl = http://localhost:3001/api
+@apiKey = MobiFix_Super_Secret_Key_2024
+
+### ============================================================================
+### MÓDULO: FUNCIONÁRIOS
+### ============================================================================
+
+### 1. Criar Funcionário
+### EXPECTATIVA: Status 201 Created. O corpo da resposta deve conter o ID gerado.
+# @name criarFuncionario
+POST {{baseUrl}}/funcionarios
+Content-Type: application/json
+
+{
+    "NumeroMecanografico": "TESTE001",
+    "Nome": "Diogo Teste",
+    "Email": "diogo.teste@mobifix.pt",
+    "Contacto": "910000000",
+    "Cargo": "MECANICO",
+    "PasswordHash": "hash_super_secreta_123",
+    "Especialidade": "Baterias",
+    "Ativo": true
+}
+
+### ----------------------------------------------------------------------------
+### Variável dinâmica: Captura o ID da resposta do pedido "criarFuncionario"
+### (Tens de correr o pedido acima primeiro para esta variável ficar preenchida!)
+@idFuncionario = {{criarFuncionario.response.body.$.NumeroMecanografico}}
+### ----------------------------------------------------------------------------
+
+### 2. Listar Funcionários (Sem Filtros)
+### EXPECTATIVA: Status 200 OK. A resposta deve ser um Array [ ... ]
+GET {{baseUrl}}/funcionarios
+
+
+###
+
+### 3. Listar Funcionários (Com Filtros)
+### EXPECTATIVA: Status 200 OK. A resposta deve ser um Array apenas com mecânicos ativos.
+GET {{baseUrl}}/funcionarios?cargo=Administrador&ativo=true
+
+###
+GET {{baseUrl}}/funcionarios/TESTE001
+###
+
+### 4. SIMULAÇÃO LN - Obter Funcionário para Login (SUCESSO)
+### EXPECTATIVA: Status 200 OK. 
+### O objeto DEVE estar em PascalCase (ex: "NumeroMecanografico", "Nome")
+### e DEVE conter o campo "PasswordHash" para o C# conseguir validar.
+GET {{baseUrl}}/auth/funcionario/{{idFuncionario}}
+x-api-key: {{apiKey}}
+
+###
+
+### 4.1 SIMULAÇÃO LN - Falha de Segurança (SEM API KEY / KEY INVÁLIDA)
+### EXPECTATIVA: Status 403 Forbidden. Mensagem de erro "Acesso Negado".
+GET {{baseUrl}}/auth/funcionario/{{idFuncionario}}
+x-api-key: chave_errada_aqui_123
+
+###
+
+### 5. Atualizar Funcionário
+### EXPECTATIVA: Status 200 OK. O nome deve mudar para "Atualizado", Cargo para "Gestor" e Ativo para false.
+PUT {{baseUrl}}/funcionarios/{{idFuncionario}}
+Content-Type: application/json
+
+{
+    "Nome": "Diogo Teste Atualizado",
+    "Email": "diogo.atualizado@mobifix.pt",
+    "Contacto": "910000000",
+    "Cargo": "ADMINISTRADOR",
+    "Especialidade": null,
+    "Ativo": false
+}
+
+###
+
+### 6. Eliminar Funcionário
+### EXPECTATIVA: Status 204 No Content. (O painel da direita vai aparecer vazio, o que significa sucesso absoluto na eliminação).
+DELETE {{baseUrl}}/funcionarios/{{idFuncionario}}

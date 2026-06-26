@@ -1,0 +1,23 @@
+[
+  {
+    "_id": "SN-XIAOMI-001",
+    "marca": "Xiaomi",
+    "modelo": "Mi Pro 2",
+    "clienteId": "250123456",
+    "emServico": true
+  },
+  {
+    "_id": "SN-NINEBOT-99",
+    "marca": "Segway-Ninebot",
+    "modelo": "Max G30",
+    "clienteId": "260987654",
+    "emServico": false
+  },
+  {
+    "_id": "SN-XIAOMI-002",
+    "marca": "Xiaomi",
+    "modelo": "Essential",
+    "clienteId": "250123456",
+    "emServico": false
+  }
+]

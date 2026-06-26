@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+:root {
+  font-family: Inter, system-ui, Arial, sans-serif;
+}
+
+body {
+  @apply bg-slate-50 min-h-screen m-0;
+}
+
+@theme {
+  --color-corporate-blue: #0057ff; /* Azul MobiFix */
+  --color-deep-slate: #1e293b;     /* Slate escuro */
+  --color-safety-orange: #ff6b00;  /* Laranja para CTAs */
+  --color-light-gray: #f8fafc; /* Novo: Fundo das secções */
+}

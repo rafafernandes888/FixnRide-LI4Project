@@ -1,0 +1,40 @@
+[
+  {
+    "_id": "ADM001",
+    "nome": "Admin Principal",
+    "email": "admin@fixnride.pt",
+    "contacto": "910000001",
+    "cargo": "ADMINISTRADOR",
+    "passwordHash": "$2a$12$KZRN.cKaQnFeSk26/iGfcOh1UgXU1AEqduANBI6LqOPTdf9TbJSuu",
+    "ativo": true
+  },
+  {
+    "_id": "OP001",
+    "nome": "João Operador",
+    "email": "joao.op@fixnride.pt",
+    "contacto": "910000002",
+    "cargo": "OPERADOR",
+    "passwordHash": "$2a$12$KZRN.cKaQnFeSk26/iGfcOh1UgXU1AEqduANBI6LqOPTdf9TbJSuu",
+    "ativo": true
+  },
+  {
+    "_id": "MEC001",
+    "nome": "Carlos Mecânico",
+    "email": "carlos.mec@fixnride.pt",
+    "contacto": "910000003",
+    "cargo": "MECANICO",
+    "especialidade": "ELETRONICA",
+    "passwordHash": "$2a$12$KZRN.cKaQnFeSk26/iGfcOh1UgXU1AEqduANBI6LqOPTdf9TbJSuu",
+    "ativo": true
+  },
+  {
+    "_id": "MEC002",
+    "nome": "Sofia Técnica",
+    "email": "sofia.tec@fixnride.pt",
+    "contacto": "910000004",
+    "cargo": "MECANICO",
+    "especialidade": "MECANICA GERAL",
+    "passwordHash": "$2a$12$KZRN.cKaQnFeSk26/iGfcOh1UgXU1AEqduANBI6LqOPTdf9TbJSuu",
+    "ativo": true
+  }
+]

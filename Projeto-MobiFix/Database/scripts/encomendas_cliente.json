@@ -1,0 +1,30 @@
+[
+  {
+    "_id": 1,
+    "clienteId": "260987654",
+    "dataEncomenda": "2024-03-25T14:00",
+    "estado": "ENTREGUE",
+    "total": 8.50,
+    "faturaId": "FAT-2024-004",
+    "itens": [
+      {
+        "pecaId": "EAN002",
+        "quantidade": 1
+      }
+    ]
+  },
+  {
+    "_id": 2,
+    "clienteId": "250123456",
+    "dataEncomenda": "2024-03-30T10:30",
+    "estado": "PRONTO PARA LEVANTAMENTO",
+    "total": 150.00,
+    "faturaId": null,
+    "itens": [
+      {
+        "pecaId": "EAN003",
+        "quantidade": 1
+      }
+    ]
+  }
+]

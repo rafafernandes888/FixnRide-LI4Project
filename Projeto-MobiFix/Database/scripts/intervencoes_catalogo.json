@@ -1,0 +1,272 @@
+[
+  {
+    "_id": 1,
+    "descricao": "Substituição de Pneu",
+    "precoFixoMaoDeObra": 15.00,
+    "especialidade": "MECANICA GERAL"
+  },
+  {
+    "_id": 2,
+    "descricao": "Diagnóstico Elétrico",
+    "precoFixoMaoDeObra": 20.00,
+    "especialidade": "ELETRONICA"
+  },
+  {
+    "_id": 3,
+    "descricao": "Diagnóstico Geral",
+    "precoFixoMaoDeObra": 10.00,
+    "especialidade": "DIAGNOSTICO"
+  },
+  {
+    "_id": 4,
+    "descricao": "Revisão Geral",
+    "precoFixoMaoDeObra": 30.00,
+    "especialidade": "MECANICA GERAL"
+  },
+  {
+    "_id": 5,
+    "descricao": "Substituição de Câmara de Ar",
+    "precoFixoMaoDeObra": 8.00,
+    "especialidade": "MECANICA GERAL"
+  },
+  {
+    "_id": 6,
+    "descricao": "Substituição de Pastilhas de Travão",
+    "precoFixoMaoDeObra": 12.00,
+    "especialidade": "MECANICA GERAL"
+  },
+  {
+    "_id": 7,
+    "descricao": "Substituição de Disco de Travão",
+    "precoFixoMaoDeObra": 14.00,
+    "especialidade": "MECANICA GERAL"
+  },
+  {
+    "_id": 8,
+    "descricao": "Afinação de Travão",
+    "precoFixoMaoDeObra": 7.00,
+    "especialidade": "MECANICA GERAL"
+  },
+  {
+    "_id": 9,
+    "descricao": "Substituição de Cabo de Travão",
+    "precoFixoMaoDeObra": 10.00,
+    "especialidade": "MECANICA GERAL"
+  },
+  {
+    "_id": 10,
+    "descricao": "Substituição de Bateria",
+    "precoFixoMaoDeObra": 18.00,
+    "especialidade": "ELETRONICA"
+  },
+  {
+    "_id": 11,
+    "descricao": "Diagnóstico de Bateria",
+    "precoFixoMaoDeObra": 12.00,
+    "especialidade": "ELETRONICA"
+  },
+  {
+    "_id": 12,
+    "descricao": "Substituição de Controlador",
+    "precoFixoMaoDeObra": 22.00,
+    "especialidade": "ELETRONICA"
+  },
+  {
+    "_id": 13,
+    "descricao": "Substituição de Display",
+    "precoFixoMaoDeObra": 15.00,
+    "especialidade": "ELETRONICA"
+  },
+  {
+    "_id": 14,
+    "descricao": "Substituição de Motor",
+    "precoFixoMaoDeObra": 35.00,
+    "especialidade": "ELETRONICA"
+  },
+  {
+    "_id": 15,
+    "descricao": "Reparação de Cablagem",
+    "precoFixoMaoDeObra": 18.00,
+    "especialidade": "ELETRONICA"
+  },
+  {
+    "_id": 16,
+    "descricao": "Atualização de Firmware",
+    "precoFixoMaoDeObra": 10.00,
+    "especialidade": "ELETRONICA"
+  },
+  {
+    "_id": 17,
+    "descricao": "Calibração de Acelerador",
+    "precoFixoMaoDeObra": 8.00,
+    "especialidade": "ELETRONICA"
+  },
+  {
+    "_id": 18,
+    "descricao": "Substituição de Guiador",
+    "precoFixoMaoDeObra": 14.00,
+    "especialidade": "MECANICA GERAL"
+  },
+  {
+    "_id": 19,
+    "descricao": "Reparação de Dobrável",
+    "precoFixoMaoDeObra": 16.00,
+    "especialidade": "MECANICA GERAL"
+  },
+  {
+    "_id": 20,
+    "descricao": "Substituição de Rolamentos",
+    "precoFixoMaoDeObra": 11.00,
+    "especialidade": "MECANICA GERAL"
+  },
+  {
+    "_id": 21,
+    "descricao": "Limpeza Profunda",
+    "precoFixoMaoDeObra": 9.00,
+    "especialidade": "MECANICA GERAL"
+  },
+  {
+    "_id": 22,
+    "descricao": "Substituição de Luzes LED",
+    "precoFixoMaoDeObra": 6.00,
+    "especialidade": "ELETRONICA"
+  },
+  {
+    "_id": 23,
+    "descricao": "Instalação de Acessórios",
+    "precoFixoMaoDeObra": 8.00,
+    "especialidade": "MECANICA GERAL"
+  },
+  {
+    "_id": 24,
+    "descricao": "Alinhamento de Rodas",
+    "precoFixoMaoDeObra": 13.00,
+    "especialidade": "MECANICA GERAL"
+  },
+  {
+    "_id": 25,
+    "descricao": "Teste de Estrada",
+    "precoFixoMaoDeObra": 5.00,
+    "especialidade": "DIAGNOSTICO"
+  },
+  {
+    "_id": 26,
+    "descricao": "Substituição de Guarda-lamas",
+    "precoFixoMaoDeObra": 10.00,
+    "especialidade": "MECANICA GERAL"
+  },
+  {
+    "_id": 27,
+    "descricao": "Reparação de Furo (Remendo)",
+    "precoFixoMaoDeObra": 12.00,
+    "especialidade": "MECANICA GERAL"
+  },
+  {
+    "_id": 28,
+    "descricao": "Instalação de Pneu Maciço",
+    "precoFixoMaoDeObra": 25.00,
+    "especialidade": "MECANICA GERAL"
+  },
+  {
+    "_id": 29,
+    "descricao": "Substituição de Amortecedor / Suspensão",
+    "precoFixoMaoDeObra": 28.00,
+    "especialidade": "MECANICA GERAL"
+  },
+  {
+    "_id": 30,
+    "descricao": "Substituição de Porta de Carregamento",
+    "precoFixoMaoDeObra": 15.00,
+    "especialidade": "ELETRONICA"
+  },
+  {
+    "_id": 31,
+    "descricao": "Reparação de Placa BMS (Bateria)",
+    "precoFixoMaoDeObra": 45.00,
+    "especialidade": "ELETRONICA"
+  },
+  {
+    "_id": 32,
+    "descricao": "Substituição de Sensor Hall (Motor)",
+    "precoFixoMaoDeObra": 35.00,
+    "especialidade": "ELETRONICA"
+  },
+  {
+    "_id": 33,
+    "descricao": "Lubrificação de Eixos e Rolamentos",
+    "precoFixoMaoDeObra": 8.00,
+    "especialidade": "MECANICA GERAL"
+  },
+  {
+    "_id": 34,
+    "descricao": "Ajuste de Folgas na Coluna de Direção",
+    "precoFixoMaoDeObra": 12.00,
+    "especialidade": "MECANICA GERAL"
+  },
+  {
+    "_id": 35,
+    "descricao": "Substituição de Campainha / Buzina",
+    "precoFixoMaoDeObra": 5.00,
+    "especialidade": "MECANICA GERAL"
+  },
+  {
+    "_id": 36,
+    "descricao": "Sangramento de Travões Hidráulicos",
+    "precoFixoMaoDeObra": 20.00,
+    "especialidade": "MECANICA GERAL"
+  },
+  {
+    "_id": 37,
+    "descricao": "Substituição de Manete de Travão",
+    "precoFixoMaoDeObra": 10.00,
+    "especialidade": "MECANICA GERAL"
+  },
+  {
+    "_id": 38,
+    "descricao": "Soldadura de Fios e Conectores",
+    "precoFixoMaoDeObra": 15.00,
+    "especialidade": "ELETRONICA"
+  },
+  {
+    "_id": 39,
+    "descricao": "Substituição de Eixo de Roda",
+    "precoFixoMaoDeObra": 18.00,
+    "especialidade": "MECANICA GERAL"
+  },
+  {
+    "_id": 40,
+    "descricao": "Instalação / Substituição de Refletores",
+    "precoFixoMaoDeObra": 4.00,
+    "especialidade": "MECANICA GERAL"
+  },
+  {
+    "_id": 41,
+    "descricao": "Impermeabilização Básica (Silicone)",
+    "precoFixoMaoDeObra": 20.00,
+    "especialidade": "ELETRONICA"
+  },
+  {
+    "_id": 42,
+    "descricao": "Remoção de Ferrugem e Tratamento",
+    "precoFixoMaoDeObra": 15.00,
+    "especialidade": "MECANICA GERAL"
+  },
+  {
+    "_id": 43,
+    "descricao": "Teste de Ciclo e Capacidade de Bateria",
+    "precoFixoMaoDeObra": 25.00,
+    "especialidade": "DIAGNOSTICO"
+  },
+  {
+    "_id": 44,
+    "descricao": "Substituição de Fecho/Trava de Segurança",
+    "precoFixoMaoDeObra": 10.00,
+    "especialidade": "MECANICA GERAL"
+  },
+  {
+    "_id": 45,
+    "descricao": "Calibração de Sensores de Travagem",
+    "precoFixoMaoDeObra": 12.00,
+    "especialidade": "ELETRONICA"
+  }
+]

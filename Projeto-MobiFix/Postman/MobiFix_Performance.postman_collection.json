@@ -1,0 +1,150 @@
+{
+  "info": {
+    "name": "MobiFix - Data API (Testes de Performance)",
+    "description": "Coleção estruturada para os testes de stress e performance definidos no Capítulo 4 do relatório Fix'n'Ride. Contém os 3 cenários de carga descritos na Tabela 4.2.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Cenário 1: Carga Base",
+      "description": "Objetivo: Estabelecer baseline de performance em carga normal de balcão.\nConfiguração no Runner: 5 VUs, Duração 1 min.",
+      "item": [
+        {
+          "name": "GET Serviços",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/servicos",
+              "host": ["{{base_url}}"],
+              "path": ["api", "servicos"]
+            }
+          }
+        },
+        {
+          "name": "GET Peças",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/pecas",
+              "host": ["{{base_url}}"],
+              "path": ["api", "pecas"]
+            }
+          }
+        },
+        {
+          "name": "GET Funcionários",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/funcionarios",
+              "host": ["{{base_url}}"],
+              "path": ["api", "funcionarios"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cenário 2: Carga Moderada",
+      "description": "Objetivo: Simular pico de utilização com múltiplos operadores simultâneos.\nConfiguração no Runner: 20 VUs, Duração 2 min.",
+      "item": [
+        {
+          "name": "GET Serviços",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/servicos",
+              "host": ["{{base_url}}"],
+              "path": ["api", "servicos"]
+            }
+          }
+        },
+        {
+          "name": "GET Peças",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/pecas",
+              "host": ["{{base_url}}"],
+              "path": ["api", "pecas"]
+            }
+          }
+        },
+        {
+          "name": "POST Funcionários (Dados Dinâmicos)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"NumeroMecanografico\": \"PERF_{{$timestamp}}\",\n    \"Nome\": \"Operador Performance {{$randomUUID}}\",\n    \"Email\": \"perf_{{$timestamp}}@mobifix.pt\",\n    \"Contacto\": \"910000000\",\n    \"Cargo\": \"OPERADOR\",\n    \"PasswordHash\": \"hash_perf_123\",\n    \"Ativo\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/funcionarios",
+              "host": ["{{base_url}}"],
+              "path": ["api", "funcionarios"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cenário 3: Carga de Pico",
+      "description": "Objetivo: Identificar limites de saturação e degradação de performance.\nConfiguração no Runner: 50 VUs, Duração 2 min.",
+      "item": [
+        {
+          "name": "GET Serviços",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/servicos",
+              "host": ["{{base_url}}"],
+              "path": ["api", "servicos"]
+            }
+          }
+        },
+        {
+          "name": "GET Peças",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/pecas",
+              "host": ["{{base_url}}"],
+              "path": ["api", "pecas"]
+            }
+          }
+        },
+        {
+          "name": "GET Agenda",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/agenda",
+              "host": ["{{base_url}}"],
+              "path": ["api", "agenda"]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3001"
+    }
+  ]
+}

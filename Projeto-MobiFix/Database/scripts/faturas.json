@@ -1,0 +1,40 @@
+[
+  {
+    "_id": "FAT-2024-001",
+    "clienteId": "250123456",
+    "vendaId": 1,
+    "servicoId": null,
+    "valorTotal": 33.50,
+    "metodoPagamento": "MBWAY",
+    "dataEmissao": "2024-03-26T14:35",
+    "devolucoes": []
+  },
+  {
+    "_id": "FAT-2024-002",
+    "clienteId": "250123456",
+    "vendaId": null,
+    "servicoId": 1,
+    "valorTotal": 40.00,
+    "metodoPagamento": "MULTIBANCO",
+    "dataEmissao": "2024-03-27T11:00",
+    "devolucoes": []
+  },
+  {
+    "_id": "FAT-2024-003",
+    "clienteId": "260987654",
+    "vendaId": 2,
+    "servicoId": null,
+    "valorTotal": 150.00,
+    "metodoPagamento": "NUMERARIO",
+    "dataEmissao": "2024-03-28T09:15",
+    "devolucoes": [
+      {
+        "dataDevolucao": "2024-03-29T10:00",
+        "motivo": "A bateria comprada não é compatível com o modelo da trotinete.",
+        "notaCredito": {
+          "valorCreditado": 150.00
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,4559 @@
+{
+  "info": {
+    "_postman_id": "dff50c16-853b-4814-9a8b-b0d5b9d6c623",
+    "name": "MobiFix - Data API (Testes Completos)",
+    "description": "Coleção completa de testes CRUD para todas as entidades da Data API MobiFix.\nOrdem de execução recomendada: Funcionários → Clientes → Trotinetes → Peças → Intervenções Catálogo → Serviços → Agenda → Encomendas Stock → Vendas → Encomendas Cliente → Faturas → Promoções → Cleanup.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53625659",
+    "_collection_link": "https://go.postman.co/collection/53625659-dff50c16-853b-4814-9a8b-b0d5b9d6c623?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Módulo - Funcionários",
+      "item": [
+        {
+          "name": "1. Criar Funcionário (Mecânico)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 201 Created\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta deve ser JSON\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});",
+                  "",
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set(\"funcionario_id\", jsonData.NumeroMecanografico);",
+                  "",
+                  "    pm.test(\"Deve conter NumeroMecanografico correto\", function () {",
+                  "        pm.expect(jsonData.NumeroMecanografico).to.eql(\"TESTE001\");",
+                  "    });",
+                  "",
+                  "    pm.test(\"Deve conter Nome correto\", function () {",
+                  "        pm.expect(jsonData.Nome).to.eql(\"Diogo Teste\");",
+                  "    });",
+                  "",
+                  "    pm.test(\"Deve conter Email correto\", function () {",
+                  "        pm.expect(jsonData.Email).to.eql(\"diogo.teste@mobifix.pt\");",
+                  "    });",
+                  "",
+                  "    pm.test(\"Deve conter Cargo correto\", function () {",
+                  "        pm.expect(jsonData.Cargo).to.eql(\"MECANICO\");",
+                  "    });",
+                  "",
+                  "    pm.test(\"Deve conter Especialidade\", function () {",
+                  "        pm.expect(jsonData.Especialidade).to.eql(\"BATERIAS\");",
+                  "    });",
+                  "",
+                  "    pm.test(\"Deve estar ativo\", function () {",
+                  "        pm.expect(jsonData.Ativo).to.be.true;",
+                  "    });",
+                  "",
+                  "    pm.test(\"NÃO deve expor PasswordHash na resposta normal\", function () {",
+                  "        pm.expect(jsonData).to.not.have.property('PasswordHash');",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"NumeroMecanografico\": \"TESTE001\",\n    \"Nome\": \"Diogo Teste\",\n    \"Email\": \"diogo.teste@mobifix.pt\",\n    \"Contacto\": \"910000000\",\n    \"Cargo\": \"Mecanico\",\n    \"PasswordHash\": \"hash_super_secreta_123\",\n    \"Especialidade\": \"Baterias\",\n    \"Ativo\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/funcionarios",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "funcionarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "1.1 Criar Funcionário (Admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 201 Created\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set(\"admin_id\", jsonData.NumeroMecanografico);",
+                  "",
+                  "    pm.test(\"Cargo deve ser ADMIN\", function () {",
+                  "        pm.expect(jsonData.Cargo).to.eql(\"ADMINISTRADOR\");",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"NumeroMecanografico\": \"ADM_TESTE\",\n    \"Nome\": \"Admin Teste\",\n    \"Email\": \"admin.teste@mobifix.pt\",\n    \"Contacto\": \"910000001\",\n    \"Cargo\": \"ADMINISTRADOR\",\n    \"PasswordHash\": \"hash_admin_123\",\n    \"Ativo\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/funcionarios",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "funcionarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "1.2 Criar Funcionário (Operador)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 201 Created\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set(\"operador_id\", jsonData.NumeroMecanografico);",
+                  "",
+                  "    pm.test(\"Cargo deve ser OPERADOR\", function () {",
+                  "        pm.expect(jsonData.Cargo).to.eql(\"OPERADOR\");",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"NumeroMecanografico\": \"OPR_TESTE\",\n    \"Nome\": \"Operador Teste\",\n    \"Email\": \"operador.teste@mobifix.pt\",\n    \"Contacto\": \"910000002\",\n    \"Cargo\": \"OPERADOR\",\n    \"PasswordHash\": \"hash_operador_123\",\n    \"Ativo\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/funcionarios",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "funcionarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "1.3 Criar Funcionário - Duplicado (Erro)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 400 ou 409 (duplicado)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([400, 409]);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta deve conter mensagem de erro\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('error');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"NumeroMecanografico\": \"TESTE001\",\n    \"Nome\": \"Diogo Duplicado\",\n    \"Email\": \"diogo.dup@mobifix.pt\",\n    \"Contacto\": \"910000099\",\n    \"Cargo\": \"Mecanico\",\n    \"PasswordHash\": \"hash_dup\",\n    \"Especialidade\": \"Baterias\",\n    \"Ativo\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/funcionarios",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "funcionarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2. Listar Funcionários (Sem Filtros)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta deve ser um array\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test(\"Array deve conter pelo menos 1 funcionário\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.length).to.be.at.least(1);",
+                  "});",
+                  "",
+                  "pm.test(\"Cada item deve ter os campos essenciais\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    jsonData.forEach(function(item) {",
+                  "        pm.expect(item).to.have.property('NumeroMecanografico');",
+                  "        pm.expect(item).to.have.property('Nome');",
+                  "        pm.expect(item).to.have.property('Email');",
+                  "        pm.expect(item).to.have.property('Cargo');",
+                  "    });",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/funcionarios",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "funcionarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3. Listar Funcionários (Filtro Cargo)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Todos os resultados devem ter cargo Mecanico\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    jsonData.forEach(function(item) {",
+                  "        pm.expect(item.Cargo.toUpperCase()).to.include('MECANICO');",
+                  "    });",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/funcionarios?cargo=Mecanico",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "funcionarios"
+              ],
+              "query": [
+                {
+                  "key": "cargo",
+                  "value": "Mecanico"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3.1 Listar Funcionários (Filtro Ativo)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Todos os resultados devem estar ativos\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    jsonData.forEach(function(item) {",
+                  "        pm.expect(item.Ativo).to.be.true;",
+                  "    });",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/funcionarios?ativo=true",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "funcionarios"
+              ],
+              "query": [
+                {
+                  "key": "ativo",
+                  "value": "true"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3.2 Listar Funcionários (Filtro Nome)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resultados devem conter 'Diogo' no nome\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.length).to.be.at.least(1);",
+                  "    jsonData.forEach(function(item) {",
+                  "        pm.expect(item.Nome.toLowerCase()).to.include('diogo');",
+                  "    });",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/funcionarios?nome=Diogo",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "funcionarios"
+              ],
+              "query": [
+                {
+                  "key": "nome",
+                  "value": "Diogo"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4. Obter Funcionário por ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Deve retornar o funcionário correto\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.NumeroMecanografico).to.eql(pm.collectionVariables.get(\"funcionario_id\"));",
+                  "});",
+                  "",
+                  "pm.test(\"Deve conter todos os campos do DTO\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('NumeroMecanografico');",
+                  "    pm.expect(jsonData).to.have.property('Nome');",
+                  "    pm.expect(jsonData).to.have.property('Email');",
+                  "    pm.expect(jsonData).to.have.property('Contacto');",
+                  "    pm.expect(jsonData).to.have.property('Cargo');",
+                  "    pm.expect(jsonData).to.have.property('Ativo');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/funcionarios/{{funcionario_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "funcionarios",
+                "{{funcionario_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4.1 Obter Funcionário Inexistente (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 404 Not Found\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/funcionarios/INEXISTENTE999",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "funcionarios",
+                "INEXISTENTE999"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "5. Auth Funcionário (SUCESSO)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Objeto tem PasswordHash\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('PasswordHash');",
+                  "});",
+                  "",
+                  "pm.test(\"PasswordHash não deve estar vazia\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.PasswordHash).to.not.be.empty;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{internal_api_key}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/funcionario/{{funcionario_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "funcionario",
+                "{{funcionario_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "5.1 Auth Funcionário - Chave Errada (403)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 403 Forbidden\", function () {",
+                  "    pm.response.to.have.status(403);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "chave_errada_aqui"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/funcionario/{{funcionario_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "funcionario",
+                "{{funcionario_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "5.2 Auth Funcionário - Sem Chave (403)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 403 Forbidden\", function () {",
+                  "    pm.response.to.have.status(403);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/auth/funcionario/{{funcionario_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "funcionario",
+                "{{funcionario_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "6. Atualizar Funcionário",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Nome deve estar atualizado\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.Nome).to.eql(\"Diogo Teste Atualizado\");",
+                  "});",
+                  "",
+                  "pm.test(\"Email deve estar atualizado\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.Email).to.eql(\"diogo.atualizado@mobifix.pt\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"Nome\": \"Diogo Teste Atualizado\",\n    \"Email\": \"diogo.atualizado@mobifix.pt\",\n    \"Contacto\": \"910000000\",\n    \"Cargo\": \"Mecanico\",\n    \"Especialidade\": \"Geral\",\n    \"Ativo\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/funcionarios/{{funcionario_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "funcionarios",
+                "{{funcionario_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "7. Eliminar Funcionário",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 ou 204\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 204]);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/funcionarios/{{funcionario_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "funcionarios",
+                "{{funcionario_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "7.1 Verificar Eliminação (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Funcionário eliminado deve retornar 404\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/funcionarios/{{funcionario_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "funcionarios",
+                "{{funcionario_id}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Módulo - Clientes",
+      "item": [
+        {
+          "name": "1. Criar Cliente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 201 Created\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta deve ser JSON\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});",
+                  "",
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set(\"cliente_nif\", jsonData.NIF);",
+                  "",
+                  "    pm.test(\"Deve conter NIF correto\", function () {",
+                  "        pm.expect(jsonData.NIF).to.eql(\"999456789\");",
+                  "    });",
+                  "",
+                  "    pm.test(\"Deve conter Nome correto\", function () {",
+                  "        pm.expect(jsonData.Nome).to.eql(\"Maria Cliente Teste\");",
+                  "    });",
+                  "",
+                  "    pm.test(\"Deve conter Email correto\", function () {",
+                  "        pm.expect(jsonData.Email).to.eql(\"maria.teste@clientes.pt\");",
+                  "    });",
+                  "",
+                  "    pm.test(\"Deve conter Telefone\", function () {",
+                  "        pm.expect(jsonData.Telefone).to.eql(\"920000000\");",
+                  "    });",
+                  "",
+                  "    pm.test(\"Deve conter Morada\", function () {",
+                  "        pm.expect(jsonData.Morada).to.eql(\"Rua da Mobilidade, 123, Braga\");",
+                  "    });",
+                  "",
+                  "    pm.test(\"NÃO deve expor PasswordHash na resposta normal\", function () {",
+                  "        pm.expect(jsonData).to.not.have.property('PasswordHash');",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"NIF\": \"999456789\",\n    \"Nome\": \"Maria Cliente Teste\",\n    \"Telefone\": \"920000000\",\n    \"Morada\": \"Rua da Mobilidade, 123, Braga\",\n    \"Email\": \"maria.teste@clientes.pt\",\n    \"PasswordHash\": \"hash_secreta_cliente_xyz\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/clientes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "clientes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "1.1 Criar Cliente - Duplicado (Erro)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 400 ou 409 (duplicado)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([400, 409]);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"NIF\": \"999456789\",\n    \"Nome\": \"Cliente Duplicado\",\n    \"Telefone\": \"920000099\",\n    \"Email\": \"dup@clientes.pt\",\n    \"PasswordHash\": \"hash_dup\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/clientes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "clientes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2. Listar Clientes (Sem Filtros)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta deve ser um array\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test(\"Cada item deve ter os campos essenciais\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    jsonData.forEach(function(item) {",
+                  "        pm.expect(item).to.have.property('NIF');",
+                  "        pm.expect(item).to.have.property('Nome');",
+                  "        pm.expect(item).to.have.property('Email');",
+                  "        pm.expect(item).to.have.property('Telefone');",
+                  "    });",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/clientes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "clientes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2.1 Listar Clientes (Filtro Nome)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resultados devem conter 'Maria' no nome\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.length).to.be.at.least(1);",
+                  "    jsonData.forEach(function(item) {",
+                  "        pm.expect(item.Nome.toLowerCase()).to.include('maria');",
+                  "    });",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/clientes?nome=Maria",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "clientes"
+              ],
+              "query": [
+                {
+                  "key": "nome",
+                  "value": "Maria"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3. Obter Cliente por NIF",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Deve retornar o cliente correto\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.NIF).to.eql(pm.collectionVariables.get(\"cliente_nif\"));",
+                  "});",
+                  "",
+                  "pm.test(\"Deve conter todos os campos do DTO\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('NIF');",
+                  "    pm.expect(jsonData).to.have.property('Nome');",
+                  "    pm.expect(jsonData).to.have.property('Email');",
+                  "    pm.expect(jsonData).to.have.property('Telefone');",
+                  "    pm.expect(jsonData).to.have.property('Morada');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/clientes/{{cliente_nif}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "clientes",
+                "{{cliente_nif}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3.1 Obter Cliente Inexistente (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 404 Not Found\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/clientes/000000000",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "clientes",
+                "000000000"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4. Auth Cliente por NIF (SUCESSO)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Objeto tem PasswordHash\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('PasswordHash');",
+                  "});",
+                  "",
+                  "pm.test(\"PasswordHash não deve estar vazia\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.PasswordHash).to.not.be.empty;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{internal_api_key}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/cliente/{{cliente_nif}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "cliente",
+                "{{cliente_nif}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4.1 Auth Cliente - Chave Errada (403)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 403 Forbidden\", function () {",
+                  "    pm.response.to.have.status(403);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "chave_errada_aqui"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/cliente/{{cliente_nif}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "cliente",
+                "{{cliente_nif}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "5. Atualizar Cliente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Nome deve estar atualizado\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.Nome).to.eql(\"Maria Cliente Atualizada\");",
+                  "});",
+                  "",
+                  "pm.test(\"Morada deve estar atualizada\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.Morada).to.eql(\"Avenida Nova, 456, Braga\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"Nome\": \"Maria Cliente Atualizada\",\n    \"Telefone\": \"921111111\",\n    \"Morada\": \"Avenida Nova, 456, Braga\",\n    \"Email\": \"maria.atualizada@cliente.pt\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/clientes/{{cliente_nif}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "clientes",
+                "{{cliente_nif}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "6. Eliminar Cliente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 ou 204\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 204]);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/clientes/{{cliente_nif}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "clientes",
+                "{{cliente_nif}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "6.1 Verificar Eliminação (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Cliente eliminado deve retornar 404\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/clientes/{{cliente_nif}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "clientes",
+                "{{cliente_nif}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Módulo - Trotinetes",
+      "item": [
+        {
+          "name": "0. Setup - Criar Cliente para Trotinete",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 201 Created\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set(\"trotinete_cliente_nif\", jsonData.NIF);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"NIF\": \"888111222\",\n    \"Nome\": \"Cliente Trotinete Teste\",\n    \"Telefone\": \"930000000\",\n    \"Email\": \"trotinete.cliente@teste.pt\",\n    \"PasswordHash\": \"hash_trot_cli\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/clientes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "clientes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "1. Criar Trotinete",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 201 Created\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta deve ser JSON\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});",
+                  "",
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set(\"trotinete_num_serie\", jsonData.NumeroSerie);",
+                  "",
+                  "    pm.test(\"Deve conter NumeroSerie correto\", function () {",
+                  "        pm.expect(jsonData.NumeroSerie).to.eql(\"TROT-TEST-001\");",
+                  "    });",
+                  "",
+                  "    pm.test(\"Deve conter Marca\", function () {",
+                  "        pm.expect(jsonData.Marca).to.eql(\"Xiaomi\");",
+                  "    });",
+                  "",
+                  "    pm.test(\"Deve conter Modelo\", function () {",
+                  "        pm.expect(jsonData.Modelo).to.eql(\"Pro 2\");",
+                  "    });",
+                  "",
+                  "    pm.test(\"EmServico deve ser false por defeito\", function () {",
+                  "        pm.expect(jsonData.EmServico).to.be.false;",
+                  "    });",
+                  "",
+                  "    pm.test(\"Deve estar associada ao cliente\", function () {",
+                  "        pm.expect(jsonData.ClienteNIF).to.eql(\"888111222\");",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"NumeroSerie\": \"TROT-TEST-001\",\n    \"Marca\": \"Xiaomi\",\n    \"Modelo\": \"Pro 2\",\n    \"EmServico\": false,\n    \"ClienteNIF\": \"888111222\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/trotinetes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "trotinetes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "1.1 Criar Segunda Trotinete",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 201 Created\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"NumeroSerie\": \"TROT-TEST-002\",\n    \"Marca\": \"Segway\",\n    \"Modelo\": \"Ninebot Max\",\n    \"EmServico\": true,\n    \"ClienteNIF\": \"888111222\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/trotinetes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "trotinetes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2. Listar Trotinetes (Sem Filtros)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta deve ser um array\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test(\"Cada item deve ter os campos essenciais\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    jsonData.forEach(function(item) {",
+                  "        pm.expect(item).to.have.property('NumeroSerie');",
+                  "        pm.expect(item).to.have.property('Marca');",
+                  "        pm.expect(item).to.have.property('Modelo');",
+                  "        pm.expect(item).to.have.property('EmServico');",
+                  "        pm.expect(item).to.have.property('ClienteNIF');",
+                  "    });",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/trotinetes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "trotinetes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2.1 Listar Trotinetes (Filtro EmServico)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Todas devem estar em serviço\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    jsonData.forEach(function(item) {",
+                  "        pm.expect(item.EmServico).to.be.true;",
+                  "    });",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/trotinetes?emServico=true",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "trotinetes"
+              ],
+              "query": [
+                {
+                  "key": "emServico",
+                  "value": "true"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3. Obter Trotinete por NumSerie",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Deve retornar a trotinete correta\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.NumeroSerie).to.eql(pm.collectionVariables.get(\"trotinete_num_serie\"));",
+                  "});",
+                  "",
+                  "pm.test(\"Deve conter todos os campos do DTO\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('NumeroSerie');",
+                  "    pm.expect(jsonData).to.have.property('Marca');",
+                  "    pm.expect(jsonData).to.have.property('Modelo');",
+                  "    pm.expect(jsonData).to.have.property('EmServico');",
+                  "    pm.expect(jsonData).to.have.property('ClienteNIF');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/trotinetes/{{trotinete_num_serie}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "trotinetes",
+                "{{trotinete_num_serie}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3.1 Obter Trotinete Inexistente (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 404 Not Found\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/trotinetes/INEXISTENTE-999",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "trotinetes",
+                "INEXISTENTE-999"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4. Atualizar Trotinete",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"EmServico deve estar atualizado para true\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.EmServico).to.be.true;",
+                  "});",
+                  "",
+                  "pm.test(\"Modelo deve estar atualizado\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.Modelo).to.eql(\"Pro 2 Max\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"Marca\": \"Xiaomi\",\n    \"Modelo\": \"Pro 2 Max\",\n    \"EmServico\": true,\n    \"ClienteNIF\": \"888111222\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/trotinetes/{{trotinete_num_serie}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "trotinetes",
+                "{{trotinete_num_serie}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "5. Eliminar Trotinete",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 ou 204\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 204]);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/trotinetes/{{trotinete_num_serie}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "trotinetes",
+                "{{trotinete_num_serie}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "5.1 Verificar Eliminação (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Trotinete eliminada deve retornar 404\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/trotinetes/{{trotinete_num_serie}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "trotinetes",
+                "{{trotinete_num_serie}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Módulo - Peças",
+      "item": [
+        {
+          "name": "1. Criar Peça",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 201 Created\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta deve ser JSON\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});",
+                  "",
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set(\"peca_ean\", jsonData.CodigoEAN);",
+                  "",
+                  "    pm.test(\"Deve conter CodigoEAN correto\", function () {",
+                  "        pm.expect(jsonData.CodigoEAN).to.eql(\"5601234567890\");",
+                  "    });",
+                  "",
+                  "    pm.test(\"Deve conter Nome\", function () {",
+                  "        pm.expect(jsonData.Nome).to.eql(\"Bateria 36V 10Ah\");",
+                  "    });",
+                  "",
+                  "    pm.test(\"Deve conter Categoria\", function () {",
+                  "        pm.expect(jsonData.Categoria).to.eql(\"BATERIAS\");",
+                  "    });",
+                  "",
+                  "    pm.test(\"CustoAquisicao deve ser numérico e >= 0\", function () {",
+                  "        pm.expect(jsonData.CustoAquisicao).to.be.a('number');",
+                  "        pm.expect(jsonData.CustoAquisicao).to.be.at.least(0);",
+                  "    });",
+                  "",
+                  "    pm.test(\"PVP deve ser numérico e >= 0\", function () {",
+                  "        pm.expect(jsonData.PVP).to.be.a('number');",
+                  "        pm.expect(jsonData.PVP).to.be.at.least(0);",
+                  "    });",
+                  "",
+                  "    pm.test(\"StockAtual deve ser 20\", function () {",
+                  "        pm.expect(jsonData.StockAtual).to.eql(20);",
+                  "    });",
+                  "",
+                  "    pm.test(\"Deve estar ativa\", function () {",
+                  "        pm.expect(jsonData.Ativo).to.be.true;",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"CodigoEAN\": \"5601234567890\",\n    \"Nome\": \"Bateria 36V 10Ah\",\n    \"Descricao\": \"Bateria de lítio para trotinetes elétricas\",\n    \"Categoria\": \"Baterias\",\n    \"CustoAquisicao\": 45.00,\n    \"PVP\": 89.99,\n    \"StockAtual\": 20,\n    \"StockMinimo\": 5,\n    \"PadraoReposicao\": 10,\n    \"Ativo\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/pecas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "pecas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "1.1 Criar Segunda Peça",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 201 Created\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set(\"peca_ean_2\", jsonData.CodigoEAN);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"CodigoEAN\": \"5609876543210\",\n    \"Nome\": \"Pneu 8.5 polegadas\",\n    \"Descricao\": \"Pneu de substituição para trotinetes\",\n    \"Categoria\": \"Rodas\",\n    \"CustoAquisicao\": 8.50,\n    \"PVP\": 19.99,\n    \"StockAtual\": 50,\n    \"StockMinimo\": 10,\n    \"PadraoReposicao\": 20,\n    \"Ativo\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/pecas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "pecas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2. Listar Peças (Sem Filtros)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta deve ser um array\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test(\"Cada item deve ter campos essenciais\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    jsonData.forEach(function(item) {",
+                  "        pm.expect(item).to.have.property('CodigoEAN');",
+                  "        pm.expect(item).to.have.property('Nome');",
+                  "        pm.expect(item).to.have.property('PVP');",
+                  "        pm.expect(item).to.have.property('StockAtual');",
+                  "    });",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/pecas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "pecas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3. Obter Peça por EAN",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Deve retornar a peça correta\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.CodigoEAN).to.eql(pm.collectionVariables.get(\"peca_ean\"));",
+                  "});",
+                  "",
+                  "pm.test(\"Deve conter todos os campos do DTO\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('CodigoEAN');",
+                  "    pm.expect(jsonData).to.have.property('Nome');",
+                  "    pm.expect(jsonData).to.have.property('Descricao');",
+                  "    pm.expect(jsonData).to.have.property('Categoria');",
+                  "    pm.expect(jsonData).to.have.property('CustoAquisicao');",
+                  "    pm.expect(jsonData).to.have.property('PVP');",
+                  "    pm.expect(jsonData).to.have.property('StockAtual');",
+                  "    pm.expect(jsonData).to.have.property('StockMinimo');",
+                  "    pm.expect(jsonData).to.have.property('PadraoReposicao');",
+                  "    pm.expect(jsonData).to.have.property('Ativo');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/pecas/{{peca_ean}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "pecas",
+                "{{peca_ean}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3.1 Obter Peça Inexistente (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 404 Not Found\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/pecas/0000000000000",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "pecas",
+                "0000000000000"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4. Atualizar Peça",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"PVP deve estar atualizado\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.PVP).to.eql(99.99);",
+                  "});",
+                  "",
+                  "pm.test(\"StockAtual deve estar atualizado\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.StockAtual).to.eql(25);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"Nome\": \"Bateria 36V 10Ah (Atualizada)\",\n    \"PVP\": 99.99,\n    \"StockAtual\": 25,\n    \"CustoAquisicao\": 50.00\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/pecas/{{peca_ean}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "pecas",
+                "{{peca_ean}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Módulo - Intervenções Catálogo",
+      "item": [
+        {
+          "name": "2. Listar Intervenções",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta deve ser um array\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test(\"Cada item deve ter campos essenciais\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    jsonData.forEach(function(item) {",
+                  "        pm.expect(item).to.have.property('IntervencaoID');",
+                  "        pm.expect(item).to.have.property('Descricao');",
+                  "        pm.expect(item).to.have.property('PrecoFixoMaoDeObra');",
+                  "        pm.expect(item).to.have.property('Especialidade');",
+                  "    });",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/intervencoes-catalogo",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "intervencoes-catalogo"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3.1 Obter Intervenção Inexistente (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 404 Not Found\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/intervencoes-catalogo/99999",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "intervencoes-catalogo",
+                "99999"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Módulo - Serviços",
+      "item": [
+        {
+          "name": "0. Setup - Criar Trotinete para Serviço",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set(\"servico_trotinete\", jsonData.NumeroSerie);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"NumeroSerie\": \"TROT-SERV-001\",\n    \"Marca\": \"Xiaomi\",\n    \"Modelo\": \"Essential\",\n    \"EmServico\": false,\n    \"ClienteNIF\": \"888111222\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/trotinetes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "trotinetes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "1. Criar Serviço",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 201 Created\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta deve ser JSON\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});",
+                  "",
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set(\"servico_id\", jsonData.ServicoID);",
+                  "",
+                  "    pm.test(\"Deve conter ServicoID\", function () {",
+                  "        pm.expect(jsonData.ServicoID).to.eql(1001);",
+                  "    });",
+                  "",
+                  "    pm.test(\"Deve conter TrotineteNumSerie\", function () {",
+                  "        pm.expect(jsonData.TrotineteNumSerie).to.eql(\"TROT-SERV-001\");",
+                  "    });",
+                  "",
+                  "    pm.test(\"Estado deve ser AGENDADO\", function () {",
+                  "        pm.expect(jsonData.Estado).to.eql(\"AGENDADO\");",
+                  "    });",
+                  "",
+                  "    pm.test(\"Deve ter DataAgendamento\", function () {",
+                  "        pm.expect(jsonData).to.have.property('DataAgendamento');",
+                  "    });",
+                  "",
+                  "    pm.test(\"Preco deve ser numérico\", function () {",
+                  "        pm.expect(jsonData.Preco).to.be.a('number');",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"ServicoID\": 1001,\n    \"TrotineteNumSerie\": \"TROT-SERV-001\",\n    \"Estado\": \"AGENDADO\",\n    \"DescricaoDiagnostico\": \"Trotinete não liga - possível problema de bateria\",\n    \"Preco\": 0\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/servicos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "servicos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2. Listar Serviços",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta deve ser um array\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test(\"Cada item deve ter campos essenciais\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    jsonData.forEach(function(item) {",
+                  "        pm.expect(item).to.have.property('ServicoID');",
+                  "        pm.expect(item).to.have.property('TrotineteNumSerie');",
+                  "        pm.expect(item).to.have.property('Estado');",
+                  "        pm.expect(item).to.have.property('DataAgendamento');",
+                  "    });",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/servicos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "servicos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3. Obter Serviço por ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Deve retornar o serviço correto\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.ServicoID).to.eql(parseInt(pm.collectionVariables.get(\"servico_id\")));",
+                  "});",
+                  "",
+                  "pm.test(\"Deve conter todos os campos do DTO\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('ServicoID');",
+                  "    pm.expect(jsonData).to.have.property('TrotineteNumSerie');",
+                  "    pm.expect(jsonData).to.have.property('Estado');",
+                  "    pm.expect(jsonData).to.have.property('DataAgendamento');",
+                  "    pm.expect(jsonData).to.have.property('DescricaoDiagnostico');",
+                  "    pm.expect(jsonData).to.have.property('Preco');",
+                  "    pm.expect(jsonData).to.have.property('HistoricoIntervencoes');",
+                  "});",
+                  "",
+                  "pm.test(\"HistoricoIntervencoes deve ser um array\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.HistoricoIntervencoes).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/servicos/{{servico_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "servicos",
+                "{{servico_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3.1 Obter Serviço Inexistente (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 404 Not Found\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/servicos/99999",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "servicos",
+                "99999"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4. Atualizar Serviço (Passar a EXECUCAO)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Estado deve estar atualizado para EXECUCAO\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.Estado).to.eql(\"EXECUCAO\");",
+                  "});",
+                  "",
+                  "pm.test(\"Diagnóstico deve estar atualizado\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.DescricaoDiagnostico).to.eql(\"Bateria com defeito confirmado - necessita substituição\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"Estado\": \"EXECUCAO\",\n    \"DescricaoDiagnostico\": \"Bateria com defeito confirmado - necessita substituição\",\n    \"Preco\": 114.99\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/servicos/{{servico_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "servicos",
+                "{{servico_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "5. Eliminar Serviço",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 ou 204\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 204]);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/servicos/{{servico_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "servicos",
+                "{{servico_id}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Módulo - Agenda",
+      "item": [
+        {
+          "name": "0. Setup - Criar Serviço para Agenda",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set(\"agenda_servico_id\", jsonData.ServicoID);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"ServicoID\": 2001,\n    \"TrotineteNumSerie\": \"TROT-SERV-001\",\n    \"Estado\": \"AGENDADO\",\n    \"DescricaoDiagnostico\": \"Diagnóstico pendente\",\n    \"Preco\": 0\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/servicos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "servicos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "1. Criar Slot de Agenda",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 201 Created\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta deve ser JSON\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});",
+                  "",
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set(\"agenda_id\", jsonData.AgendaID);",
+                  "",
+                  "    pm.test(\"Deve conter AgendaID\", function () {",
+                  "        pm.expect(jsonData.AgendaID).to.eql(5001);",
+                  "    });",
+                  "",
+                  "    pm.test(\"Deve conter MecanicoNumero\", function () {",
+                  "        pm.expect(jsonData).to.have.property('MecanicoNumero');",
+                  "    });",
+                  "",
+                  "    pm.test(\"TipoSlot deve ser DIAGNOSTICO\", function () {",
+                  "        pm.expect(jsonData.TipoSlot).to.eql(\"DIAGNOSTICO\");",
+                  "    });",
+                  "",
+                  "    pm.test(\"Estado deve ser RESERVADO\", function () {",
+                  "        pm.expect(jsonData.Estado).to.eql(\"RESERVADO\");",
+                  "    });",
+                  "",
+                  "    pm.test(\"Deve ter DataHoraInicio\", function () {",
+                  "        pm.expect(jsonData).to.have.property('DataHoraInicio');",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"AgendaID\": 5001,\n    \"MecanicoNumero\": \"TESTE001\",\n    \"ServicoID\": 2001,\n    \"TipoSlot\": \"DIAGNOSTICO\",\n    \"DataHoraInicio\": \"2026-04-10T09:00:00.000Z\",\n    \"Estado\": \"RESERVADO\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/agenda",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "agenda"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "1.1 Criar Slot de Reparação",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 201 Created\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.test(\"TipoSlot deve ser REPARACAO\", function () {",
+                  "        pm.expect(jsonData.TipoSlot).to.eql(\"REPARACAO\");",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"AgendaID\": 5002,\n    \"MecanicoNumero\": \"TESTE001\",\n    \"ServicoID\": 2001,\n    \"TipoSlot\": \"REPARACAO\",\n    \"IntervencaoID\": 1,\n    \"DataHoraInicio\": \"2026-04-10T14:00:00.000Z\",\n    \"Estado\": \"RESERVADO\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/agenda",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "agenda"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2. Listar Agenda",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta deve ser um array\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test(\"Cada item deve ter campos essenciais\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    jsonData.forEach(function(item) {",
+                  "        pm.expect(item).to.have.property('AgendaID');",
+                  "        pm.expect(item).to.have.property('MecanicoNumero');",
+                  "        pm.expect(item).to.have.property('ServicoID');",
+                  "        pm.expect(item).to.have.property('TipoSlot');",
+                  "        pm.expect(item).to.have.property('Estado');",
+                  "    });",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/agenda",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "agenda"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3. Obter Slot por ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Deve retornar o slot correto\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.AgendaID).to.eql(parseInt(pm.collectionVariables.get(\"agenda_id\")));",
+                  "});",
+                  "",
+                  "pm.test(\"Deve conter todos os campos do DTO\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('AgendaID');",
+                  "    pm.expect(jsonData).to.have.property('MecanicoNumero');",
+                  "    pm.expect(jsonData).to.have.property('ServicoID');",
+                  "    pm.expect(jsonData).to.have.property('TipoSlot');",
+                  "    pm.expect(jsonData).to.have.property('DataHoraInicio');",
+                  "    pm.expect(jsonData).to.have.property('Estado');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/agenda/{{agenda_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "agenda",
+                "{{agenda_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3.1 Obter Slot Inexistente (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 404 Not Found\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/agenda/99999",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "agenda",
+                "99999"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4. Atualizar Slot de Agenda",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"DataHoraInicio deve estar atualizada\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.DataHoraInicio).to.include(\"2026-04-11\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"MecanicoNumero\": \"TESTE001\",\n    \"ServicoID\": 2001,\n    \"TipoSlot\": \"DIAGNOSTICO\",\n    \"DataHoraInicio\": \"2026-04-11T10:00:00.000Z\",\n    \"Estado\": \"RESERVADO\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/agenda/{{agenda_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "agenda",
+                "{{agenda_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "5. Eliminar Slot de Agenda",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 ou 204\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 204]);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/agenda/{{agenda_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "agenda",
+                "{{agenda_id}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Módulo - Encomendas Stock",
+      "item": [
+        {
+          "name": "1. Criar Encomenda Stock",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 201 Created\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta deve ser JSON\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});",
+                  "",
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set(\"encomenda_stock_id\", jsonData.EncomendaID);",
+                  "",
+                  "    pm.test(\"Deve conter EncomendaID\", function () {",
+                  "        pm.expect(jsonData.EncomendaID).to.eql(3001);",
+                  "    });",
+                  "",
+                  "    pm.test(\"Deve conter PecaEAN\", function () {",
+                  "        pm.expect(jsonData.PecaEAN).to.eql(\"5609876543210\");",
+                  "    });",
+                  "",
+                  "    pm.test(\"Quantidade deve ser 30\", function () {",
+                  "        pm.expect(jsonData.Quantidade).to.eql(30);",
+                  "    });",
+                  "",
+                  "    pm.test(\"Estado deve ser PENDENTE\", function () {",
+                  "        pm.expect(jsonData.Estado).to.eql(\"PENDENTE\");",
+                  "    });",
+                  "",
+                  "    pm.test(\"Deve ter DataPedido\", function () {",
+                  "        pm.expect(jsonData).to.have.property('DataPedido');",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"EncomendaID\": 3001,\n    \"PecaEAN\": \"5609876543210\",\n    \"Quantidade\": 30,\n    \"Estado\": \"PENDENTE\",\n    \"AdminValidadorNumero\": \"ADM_TESTE\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/encomendas-stock",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "encomendas-stock"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2. Listar Encomendas Stock",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta deve ser um array\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test(\"Cada item deve ter campos essenciais\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    jsonData.forEach(function(item) {",
+                  "        pm.expect(item).to.have.property('EncomendaID');",
+                  "        pm.expect(item).to.have.property('PecaEAN');",
+                  "        pm.expect(item).to.have.property('Quantidade');",
+                  "        pm.expect(item).to.have.property('Estado');",
+                  "    });",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/encomendas-stock",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "encomendas-stock"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3. Obter Encomenda Stock por ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Deve retornar a encomenda correta\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.EncomendaID).to.eql(parseInt(pm.collectionVariables.get(\"encomenda_stock_id\")));",
+                  "});",
+                  "",
+                  "pm.test(\"Deve conter todos os campos do DTO\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('EncomendaID');",
+                  "    pm.expect(jsonData).to.have.property('PecaEAN');",
+                  "    pm.expect(jsonData).to.have.property('Quantidade');",
+                  "    pm.expect(jsonData).to.have.property('Estado');",
+                  "    pm.expect(jsonData).to.have.property('DataPedido');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/encomendas-stock/{{encomenda_stock_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "encomendas-stock",
+                "{{encomenda_stock_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3.1 Obter Encomenda Stock Inexistente (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 404 Not Found\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/encomendas-stock/99999",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "encomendas-stock",
+                "99999"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4. Atualizar Encomenda Stock (TRANSITO)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Estado deve ser TRANSITO\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.Estado).to.eql(\"TRANSITO\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"Estado\": \"TRANSITO\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/encomendas-stock/{{encomenda_stock_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "encomendas-stock",
+                "{{encomenda_stock_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4.1 Atualizar Encomenda Stock (RECECIONADA)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Estado deve ser RECECIONADA\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.Estado).to.eql(\"RECECIONADA\");",
+                  "});",
+                  "",
+                  "pm.test(\"Deve ter OperadorRececaoNumero\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.OperadorRececaoNumero).to.eql(\"OPR_TESTE\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"Estado\": \"RECECIONADA\",\n    \"OperadorRececaoNumero\": \"OPR_TESTE\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/encomendas-stock/{{encomenda_stock_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "encomendas-stock",
+                "{{encomenda_stock_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "5. Eliminar Encomenda Stock",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 ou 204\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 204]);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/encomendas-stock/{{encomenda_stock_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "encomendas-stock",
+                "{{encomenda_stock_id}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Módulo - Vendas",
+      "item": [
+        {
+          "name": "1. Criar Venda",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 201 Created\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta deve ser JSON\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});",
+                  "",
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set(\"venda_id\", jsonData.VendaID);",
+                  "",
+                  "    pm.test(\"Deve conter VendaID\", function () {",
+                  "        pm.expect(jsonData.VendaID).to.eql(4001);",
+                  "    });",
+                  "",
+                  "    pm.test(\"Deve conter OperadorNumero\", function () {",
+                  "        pm.expect(jsonData.OperadorNumero).to.eql(\"OPR_TESTE\");",
+                  "    });",
+                  "",
+                  "    pm.test(\"Total deve ser numérico e >= 0\", function () {",
+                  "        pm.expect(jsonData.Total).to.be.a('number');",
+                  "        pm.expect(jsonData.Total).to.be.at.least(0);",
+                  "    });",
+                  "",
+                  "    pm.test(\"Deve ter DataVenda\", function () {",
+                  "        pm.expect(jsonData).to.have.property('DataVenda');",
+                  "    });",
+                  "",
+                  "    pm.test(\"ItensVenda deve ser um array com itens\", function () {",
+                  "        pm.expect(jsonData.ItensVenda).to.be.an('array');",
+                  "        pm.expect(jsonData.ItensVenda.length).to.be.at.least(1);",
+                  "    });",
+                  "",
+                  "    pm.test(\"Cada item de venda deve ter PecaEAN e Quantidade\", function () {",
+                  "        jsonData.ItensVenda.forEach(function(item) {",
+                  "            pm.expect(item).to.have.property('PecaEAN');",
+                  "            pm.expect(item).to.have.property('Quantidade');",
+                  "            pm.expect(item.Quantidade).to.be.at.least(1);",
+                  "        });",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"VendaID\": 4001,\n    \"OperadorNumero\": \"OPR_TESTE\",\n    \"Total\": 109.98,\n    \"ItensVenda\": [\n        {\n            \"PecaEAN\": \"5609876543210\",\n            \"Quantidade\": 2\n        }\n    ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/vendas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "vendas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2. Listar Vendas",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta deve ser um array\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test(\"Cada item deve ter campos essenciais\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    jsonData.forEach(function(item) {",
+                  "        pm.expect(item).to.have.property('VendaID');",
+                  "        pm.expect(item).to.have.property('OperadorNumero');",
+                  "        pm.expect(item).to.have.property('Total');",
+                  "        pm.expect(item).to.have.property('ItensVenda');",
+                  "    });",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/vendas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "vendas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3. Obter Venda por ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Deve retornar a venda correta\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.VendaID).to.eql(parseInt(pm.collectionVariables.get(\"venda_id\")));",
+                  "});",
+                  "",
+                  "pm.test(\"Deve conter todos os campos do DTO\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('VendaID');",
+                  "    pm.expect(jsonData).to.have.property('OperadorNumero');",
+                  "    pm.expect(jsonData).to.have.property('DataVenda');",
+                  "    pm.expect(jsonData).to.have.property('Total');",
+                  "    pm.expect(jsonData).to.have.property('ItensVenda');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/vendas/{{venda_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "vendas",
+                "{{venda_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3.1 Obter Venda Inexistente (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 404 Not Found\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/vendas/99999",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "vendas",
+                "99999"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4. Atualizar Venda",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Total deve estar atualizado\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.Total).to.eql(159.97);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"Total\": 159.97,\n    \"ItensVenda\": [\n        {\n            \"PecaEAN\": \"5609876543210\",\n            \"Quantidade\": 3\n        }\n    ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/vendas/{{venda_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "vendas",
+                "{{venda_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "5. Eliminar Venda",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 ou 204\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 204]);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/vendas/{{venda_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "vendas",
+                "{{venda_id}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Módulo - Encomendas Cliente",
+      "item": [
+        {
+          "name": "1. Criar Encomenda Cliente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 201 Created\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta deve ser JSON\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});",
+                  "",
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set(\"encomenda_cliente_id\", jsonData.EncomendaClienteID);",
+                  "",
+                  "    pm.test(\"Deve conter EncomendaClienteID\", function () {",
+                  "        pm.expect(jsonData.EncomendaClienteID).to.eql(6001);",
+                  "    });",
+                  "",
+                  "    pm.test(\"Deve conter ClienteNIF\", function () {",
+                  "        pm.expect(jsonData.ClienteNIF).to.eql(\"888111222\");",
+                  "    });",
+                  "",
+                  "    pm.test(\"Total deve ser numérico e >= 0\", function () {",
+                  "        pm.expect(jsonData.Total).to.be.a('number');",
+                  "        pm.expect(jsonData.Total).to.be.at.least(0);",
+                  "    });",
+                  "",
+                  "    pm.test(\"Deve ter DataEncomenda\", function () {",
+                  "        pm.expect(jsonData).to.have.property('DataEncomenda');",
+                  "    });",
+                  "",
+                  "    pm.test(\"Itens deve ser um array com itens\", function () {",
+                  "        pm.expect(jsonData.Itens).to.be.an('array');",
+                  "        pm.expect(jsonData.Itens.length).to.be.at.least(1);",
+                  "    });",
+                  "",
+                  "    pm.test(\"Cada item deve ter PecaEAN e Quantidade\", function () {",
+                  "        jsonData.Itens.forEach(function(item) {",
+                  "            pm.expect(item).to.have.property('PecaEAN');",
+                  "            pm.expect(item).to.have.property('Quantidade');",
+                  "        });",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"EncomendaClienteID\": 6001,\n    \"ClienteNIF\": \"888111222\",\n    \"Total\": 89.99,\n    \"Itens\": [\n        {\n            \"PecaEAN\": \"5609876543210\",\n            \"Quantidade\": 1\n        }\n    ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/encomendas-cliente",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "encomendas-cliente"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2. Listar Encomendas Cliente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta deve ser um array\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test(\"Cada item deve ter campos essenciais\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    jsonData.forEach(function(item) {",
+                  "        pm.expect(item).to.have.property('EncomendaClienteID');",
+                  "        pm.expect(item).to.have.property('ClienteNIF');",
+                  "        pm.expect(item).to.have.property('Total');",
+                  "        pm.expect(item).to.have.property('Itens');",
+                  "    });",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/encomendas-cliente",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "encomendas-cliente"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3. Obter Encomenda Cliente por ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Deve retornar a encomenda correta\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.EncomendaClienteID).to.eql(parseInt(pm.collectionVariables.get(\"encomenda_cliente_id\")));",
+                  "});",
+                  "",
+                  "pm.test(\"Deve conter todos os campos do DTO\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('EncomendaClienteID');",
+                  "    pm.expect(jsonData).to.have.property('ClienteNIF');",
+                  "    pm.expect(jsonData).to.have.property('DataEncomenda');",
+                  "    pm.expect(jsonData).to.have.property('Estado');",
+                  "    pm.expect(jsonData).to.have.property('Total');",
+                  "    pm.expect(jsonData).to.have.property('Itens');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/encomendas-cliente/{{encomenda_cliente_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "encomendas-cliente",
+                "{{encomenda_cliente_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3.1 Obter Encomenda Cliente Inexistente (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 404 Not Found\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/encomendas-cliente/99999",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "encomendas-cliente",
+                "99999"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4. Atualizar Encomenda Cliente (PRONTO PARA LEVANTAMENTO)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Estado deve ser PRONTO PARA LEVANTAMENTO\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.Estado).to.eql(\"PRONTO PARA LEVANTAMENTO\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"Estado\": \"PRONTO PARA LEVANTAMENTO\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/encomendas-cliente/{{encomenda_cliente_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "encomendas-cliente",
+                "{{encomenda_cliente_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "5. Eliminar Encomenda Cliente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 ou 204\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 204]);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/encomendas-cliente/{{encomenda_cliente_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "encomendas-cliente",
+                "{{encomenda_cliente_id}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Módulo - Faturas",
+      "item": [
+        {
+          "name": "1. Criar Fatura",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 201 Created\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta deve ser JSON\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});",
+                  "",
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set(\"fatura_numero\", jsonData.NumeroFatura);",
+                  "",
+                  "    pm.test(\"Deve conter NumeroFatura\", function () {",
+                  "        pm.expect(jsonData.NumeroFatura).to.eql(\"FAT-2026-001\");",
+                  "    });",
+                  "",
+                  "    pm.test(\"Deve conter ClienteNIF\", function () {",
+                  "        pm.expect(jsonData.ClienteNIF).to.eql(\"888111222\");",
+                  "    });",
+                  "",
+                  "    pm.test(\"ValorTotal deve ser numérico e >= 0\", function () {",
+                  "        pm.expect(jsonData.ValorTotal).to.be.a('number');",
+                  "        pm.expect(jsonData.ValorTotal).to.be.at.least(0);",
+                  "    });",
+                  "",
+                  "    pm.test(\"MetodoPagamento deve ser válido\", function () {",
+                  "        pm.expect(jsonData.MetodoPagamento).to.be.oneOf(['MBWAY', 'MULTIBANCO', 'NUMERARIO']);",
+                  "    });",
+                  "",
+                  "    pm.test(\"Deve ter DataEmissao\", function () {",
+                  "        pm.expect(jsonData).to.have.property('DataEmissao');",
+                  "    });",
+                  "",
+                  "    pm.test(\"Devolucoes deve ser um array\", function () {",
+                  "        pm.expect(jsonData.Devolucoes).to.be.an('array');",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"NumeroFatura\": \"FAT-2026-001\",\n    \"clienteId\": \"888111222\",\n    \"ValorTotal\": 109.98,\n    \"MetodoPagamento\": \"MBWAY\",\n    \"Devolucoes\": []\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/faturas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "faturas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "1.1 Criar Fatura com Serviço",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 201 Created\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.test(\"Deve ter ServicoID\", function () {",
+                  "        pm.expect(jsonData).to.have.property('ServicoID');",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"NumeroFatura\": \"FAT-2026-002\",\n    \"clienteId\": \"888111222\",\n    \"ServicoID\": 2001,\n    \"ValorTotal\": 114.99,\n    \"MetodoPagamento\": \"MULTIBANCO\",\n    \"Devolucoes\": []\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/faturas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "faturas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2. Listar Faturas",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta deve ser um array\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test(\"Cada item deve ter campos essenciais\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    jsonData.forEach(function(item) {",
+                  "        pm.expect(item).to.have.property('NumeroFatura');",
+                  "        pm.expect(item).to.have.property('ClienteNIF');",
+                  "        pm.expect(item).to.have.property('ValorTotal');",
+                  "        pm.expect(item).to.have.property('MetodoPagamento');",
+                  "    });",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/faturas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "faturas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3. Obter Fatura por Número",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Deve retornar a fatura correta\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.NumeroFatura).to.eql(pm.collectionVariables.get(\"fatura_numero\"));",
+                  "});",
+                  "",
+                  "pm.test(\"Deve conter todos os campos do DTO\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('NumeroFatura');",
+                  "    pm.expect(jsonData).to.have.property('ClienteNIF');",
+                  "    pm.expect(jsonData).to.have.property('ValorTotal');",
+                  "    pm.expect(jsonData).to.have.property('MetodoPagamento');",
+                  "    pm.expect(jsonData).to.have.property('DataEmissao');",
+                  "    pm.expect(jsonData).to.have.property('Devolucoes');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/faturas/{{fatura_numero}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "faturas",
+                "{{fatura_numero}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3.1 Obter Fatura Inexistente (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 404 Not Found\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/faturas/FAT-INEXISTENTE",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "faturas",
+                "FAT-INEXISTENTE"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4. Atualizar Fatura (Adicionar Devolução)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Devolucoes deve conter pelo menos 1 item\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.Devolucoes).to.be.an('array');",
+                  "    pm.expect(jsonData.Devolucoes.length).to.be.at.least(1);",
+                  "});",
+                  "",
+                  "pm.test(\"Devolução deve ter motivo e nota de crédito\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    var dev = jsonData.Devolucoes[0];",
+                  "    pm.expect(dev).to.have.property('Motivo');",
+                  "    pm.expect(dev).to.have.property('NotaCredito');",
+                  "    pm.expect(dev.NotaCredito).to.have.property('ValorCreditado');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"Devolucoes\": [\n        {\n            \"Motivo\": \"Peça com defeito de fabrico\",\n            \"NotaCredito\": {\n                \"ValorCreditado\": 19.99\n            }\n        }\n    ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/faturas/{{fatura_numero}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "faturas",
+                "{{fatura_numero}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "5. Eliminar Fatura",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 ou 204\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 204]);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/faturas/{{fatura_numero}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "faturas",
+                "{{fatura_numero}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Módulo - Promoções",
+      "item": [
+        {
+          "name": "1. Criar Promoção",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 201 Created\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta deve ser JSON\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});",
+                  "",
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set(\"promocao_id\", jsonData.PromocaoID);",
+                  "",
+                  "    pm.test(\"Deve conter PromocaoID\", function () {",
+                  "        pm.expect(jsonData.PromocaoID).to.eql(7001);",
+                  "    });",
+                  "",
+                  "    pm.test(\"Deve conter Descricao\", function () {",
+                  "        pm.expect(jsonData.Descricao).to.eql(\"Promoção de Primavera - Baterias\");",
+                  "    });",
+                  "",
+                  "    pm.test(\"PercentagemDesconto deve estar entre 0 e 100\", function () {",
+                  "        pm.expect(jsonData.PercentagemDesconto).to.be.at.least(0);",
+                  "        pm.expect(jsonData.PercentagemDesconto).to.be.at.most(100);",
+                  "    });",
+                  "",
+                  "    pm.test(\"Deve ter datas de início e fim\", function () {",
+                  "        pm.expect(jsonData).to.have.property('DataInicio');",
+                  "        pm.expect(jsonData).to.have.property('DataFim');",
+                  "    });",
+                  "",
+                  "    pm.test(\"Deve conter AdministradorNumero\", function () {",
+                  "        pm.expect(jsonData.AdministradorNumero).to.eql(\"ADM_TESTE\");",
+                  "    });",
+                  "",
+                  "    pm.test(\"PecasAplicaveisEANs deve ser um array\", function () {",
+                  "        pm.expect(jsonData.PecasAplicaveisEANs).to.be.an('array');",
+                  "        pm.expect(jsonData.PecasAplicaveisEANs.length).to.be.at.least(1);",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"PromocaoID\": 7001,\n    \"Descricao\": \"Promoção de Primavera - Baterias\",\n    \"PercentagemDesconto\": 15,\n    \"DataInicio\": \"2026-04-01\",\n    \"DataFim\": \"2026-04-30\",\n    \"AdministradorNumero\": \"ADM_TESTE\",\n    \"PecasAplicaveisEANs\": [\"5601234567890\", \"5609876543210\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/promocoes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "promocoes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2. Listar Promoções",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta deve ser um array\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test(\"Cada item deve ter campos essenciais\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    jsonData.forEach(function(item) {",
+                  "        pm.expect(item).to.have.property('PromocaoID');",
+                  "        pm.expect(item).to.have.property('Descricao');",
+                  "        pm.expect(item).to.have.property('PercentagemDesconto');",
+                  "        pm.expect(item).to.have.property('DataInicio');",
+                  "        pm.expect(item).to.have.property('DataFim');",
+                  "    });",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/promocoes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "promocoes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3. Obter Promoção por ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/promocoes/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "promocoes",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3.1 Obter Promoção Inexistente (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 404 Not Found\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/promocoes/99999",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "promocoes",
+                "99999"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4. Atualizar Promoção",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Desconto deve estar atualizado para 20%\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.PercentagemDesconto).to.eql(20);",
+                  "});",
+                  "",
+                  "pm.test(\"Descrição deve estar atualizada\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.Descricao).to.eql(\"Promoção de Primavera MEGA - Baterias\");",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"Descricao\": \"Promoção de Primavera MEGA - Baterias\",\n    \"PercentagemDesconto\": 20,\n    \"DataFim\": \"2026-07-16\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/promocoes/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "promocoes",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "5. Eliminar Promoção",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200 ou 204\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 204]);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/promocoes/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "promocoes",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Cleanup - Dados de Teste",
+      "item": [
+        {
+          "name": "Cleanup - Eliminar Fatura 2",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/faturas/FAT-2026-002",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "faturas",
+                "FAT-2026-002"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cleanup - Eliminar Agenda Slot 2",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/agenda/5002",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "agenda",
+                "5002"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cleanup - Eliminar Serviço Agenda",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/servicos/2001",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "servicos",
+                "2001"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cleanup - Eliminar Trotinete Serviço",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/trotinetes/TROT-SERV-001",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "trotinetes",
+                "TROT-SERV-001"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cleanup - Eliminar Trotinete 2",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/trotinetes/TROT-TEST-002",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "trotinetes",
+                "TROT-TEST-002"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cleanup - Eliminar Peça 2",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/pecas/5609876543210",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "pecas",
+                "5609876543210"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cleanup - Eliminar Intervenção 2",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/intervencoes-catalogo/2",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "intervencoes-catalogo",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cleanup - Eliminar Cliente Trotinete",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/clientes/888111222",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "clientes",
+                "888111222"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cleanup - Eliminar Admin",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/funcionarios/ADM_TESTE",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "funcionarios",
+                "ADM_TESTE"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cleanup - Eliminar Operador",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/funcionarios/OPR_TESTE",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "funcionarios",
+                "OPR_TESTE"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3001"
+    },
+    {
+      "key": "internal_api_key",
+      "value": "MobiFix_Super_Secret_Key_2024"
+    },
+    {
+      "key": "funcionario_id",
+      "value": ""
+    },
+    {
+      "key": "admin_id",
+      "value": ""
+    },
+    {
+      "key": "operador_id",
+      "value": ""
+    },
+    {
+      "key": "cliente_nif",
+      "value": ""
+    },
+    {
+      "key": "trotinete_cliente_nif",
+      "value": ""
+    },
+    {
+      "key": "trotinete_num_serie",
+      "value": ""
+    },
+    {
+      "key": "peca_ean",
+      "value": ""
+    },
+    {
+      "key": "peca_ean_2",
+      "value": ""
+    },
+    {
+      "key": "intervencao_id",
+      "value": ""
+    },
+    {
+      "key": "servico_id",
+      "value": ""
+    },
+    {
+      "key": "servico_trotinete",
+      "value": ""
+    },
+    {
+      "key": "agenda_id",
+      "value": ""
+    },
+    {
+      "key": "agenda_servico_id",
+      "value": ""
+    },
+    {
+      "key": "encomenda_stock_id",
+      "value": ""
+    },
+    {
+      "key": "encomenda_cliente_id",
+      "value": ""
+    },
+    {
+      "key": "venda_id",
+      "value": ""
+    },
+    {
+      "key": "fatura_numero",
+      "value": ""
+    },
+    {
+      "key": "promocao_id",
+      "value": ""
+    }
+  ]
+}

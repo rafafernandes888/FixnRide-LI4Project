@@ -1,0 +1,27 @@
+[
+  {
+    "_id": 1,
+    "descricao": "Campanha de Primavera - Travões Seguros",
+    "percentagemDesconto": 15.00,
+    "dataInicio": "2024-04-01T00:00",
+    "dataFim": "2024-04-30T23:59",
+    "administradorId": "ADM001",
+    "ativa": true,
+    "pecasAplicaveisIds": [
+      "EAN001",
+      "EAN002"
+    ]
+  },
+  {
+    "_id": 2,
+    "descricao": "Black Friday Baterias",
+    "percentagemDesconto": 30.00,
+    "dataInicio": "2024-11-20T00:00",
+    "dataFim": "2024-11-30T23:59",
+    "administradorId": "ADM001",
+    "ativa": false,
+    "pecasAplicaveisIds": [
+      "EAN003"
+    ]
+  }
+]

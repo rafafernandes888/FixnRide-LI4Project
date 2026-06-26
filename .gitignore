@@ -1,0 +1,135 @@
+[Bb]in/
+[Oo]bj/
+*.user
+*.userosscache
+*.sln.docstates
+*.suo
+*.userprefs
+
+
+TestResults/
+xunit.runner.json
+
+
+*.nupkg
+*.snupkg
+**/packages/
+!**/packages/build/
+*.nuget.props
+*.nuget.targets
+
+appsettings.Development.json
+appsettings.local.json
+local.settings.json
+
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+
+.idea/
+*.sln.iml
+
+
+Thumbs.db
+ehthumbs.db
+ehthumbs_vista.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+
+
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Trashes
+
+
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+
+*.log
+npm-debug.log*
+yarn-error.log*
+
+
+*.dump
+
+
+
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+*.synctex(busy)
+*.run.xml
+
+*.vpp.bak*
+*.vpp.lck*
+# =========================================
+# Ficheiros auxiliares do LaTeX
+# =========================================
+*.aux
+*.lof
+*.log
+*.lot
+*.fls
+*.out
+*.toc
+*.fmt
+*.fot
+*.cb
+*.cb2
+*.brf
+*.nlo
+*.aux
+.env
+
+appsettings.Development.json
+# =========================================
+# Ficheiros de Bibliografia (BibTeX/Biber)
+# =========================================
+*.bbl
+*.bcf
+*.blg
+*-blx.aux
+*-blx.bib
+*.run.xml
+
+# =========================================
+# Utilitários de compilação e sincronização
+# =========================================
+*.fdb_latexmk
+*.synctex
+*.synctex(busy)
+*.synctex.gz
+*.synctex.gz(busy)
+*.pdfsync
+
+# =========================================
+# Índices e Glossários
+# =========================================
+*.alg
+*.acr
+*.acn
+*.glg
+*.glo
+*.gls
+*.glsdefs
+*.ist
+*.idx
+*.ind
+*.ilg
+
+node_modules/
+
+# =========================================
+# EXCEÇÃO: Garantir que o PDF NUNCA é ignorado
+# =========================================
+!*.pdf
